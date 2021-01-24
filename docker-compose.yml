@@ -38,6 +38,14 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+        
+  rabbitmq:
+    build:
+      context: .
+      target: symfony_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "15672:15672"    
 
 volumes:
   caddy_data:

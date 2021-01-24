@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpIncludeInspection */
+/** @noinspection PhpFullyQualifiedNameUsageInspection */
 
 namespace App;
 
