@@ -10,6 +10,8 @@ use App\Common\Parser\Html\NewsArticleParserInterface;
 use App\Entity\NewsArticle;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ParseNewsArticleHandler
@@ -21,12 +23,14 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
     /**
      * ParseNewsArticleHandler constructor.
      * @param LoggerInterface $logger Logger service
+     * @param ValidatorInterface $validator
      * @param EntityManagerInterface $entityManager Doctrine entity manager
      * @param DataProviderInterface $dataProvider Data provider for parser
      * @param NewsArticleParserInterface $newsArticleParser News article parser service
      */
     public function __construct(
         private LoggerInterface $logger,
+        private ValidatorInterface $validator,
         private EntityManagerInterface $entityManager,
         private DataProviderInterface $dataProvider,
         private NewsArticleParserInterface $newsArticleParser,
@@ -102,6 +106,12 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
         // Store article data
         $this->entityManager->persist($article);
         $this->entityManager->flush();
+
+        // Validate news article entity
+        $errors = $this->validator->validate($article);
+        if (count($errors) > 0) {
+            throw new ValidationFailedException($errors->get(0)->getInvalidValue(), $errors);
+        }
 
         return $article;
     }
