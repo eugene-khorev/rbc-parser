@@ -7,16 +7,26 @@ namespace App\Common\Parser;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * Class HttpDataProvider
+ * Provider that gets data to parse by using HTTP requests
+ * @package App\Common\Parser
+ */
 final class HttpDataProvider implements DataProviderInterface
 {
 
+    /**
+     * HttpDataProvider constructor.
+     * @param HttpClientInterface $client HTTP client service
+     */
     public function __construct(
         private HttpClientInterface $client
     ) {}
 
     /**
-     * @param string $source
-     * @param string $method
+     * Request data via HTTP
+     * @param string $source URL to request to get data
+     * @param string $method HTTP request method
      * @return string
      * @throws ExceptionInterface
      */

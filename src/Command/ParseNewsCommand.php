@@ -9,8 +9,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
+/**
+ * Class ParseNewsCommand
+ * Dispatches news parsing command
+ * @package App\Command
+ */
 class ParseNewsCommand extends Command
 {
     public function __construct(
@@ -21,6 +25,9 @@ class ParseNewsCommand extends Command
         parent::__construct('app:parse-news');
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function configure()
     {
         $this
@@ -34,10 +41,7 @@ class ParseNewsCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @return int
-     * @throws ExceptionInterface
+     * @inheritDoc
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
