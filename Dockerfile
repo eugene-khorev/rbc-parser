@@ -37,6 +37,7 @@ RUN apk add --no-cache \
 		git \
 		jq \
         shadow \
+        yarn \
 	;
 
 ARG APCU_VERSION=5.1.19
@@ -110,6 +111,8 @@ RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
 	apk del .pgsql-deps
 ###< doctrine/doctrine-bundle ###
 ###< recipes ###
+
+RUN yarn install
 
 COPY . .
 
