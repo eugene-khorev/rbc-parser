@@ -112,3 +112,7 @@ _Bootstrap 4_.
 Но я их умею и практикую. 
 Если критично, готов реализовать позднее, 
 либо рассказать о своем опыте на интервью. 
+
+# Скриншоты
+![Список](https://raw.githubusercontent.com/eugene-khorev/rbc-parser/master/assets/list.png)
+![Новость](https://raw.githubusercontent.com/eugene-khorev/rbc-parser/master/assets/full.png)
