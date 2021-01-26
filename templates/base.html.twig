@@ -12,7 +12,12 @@
             {# { encore_entry_script_tags('app') } #}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-light">
+        <div class="container">
+            <nav class="navbar navbar-dark bg-dark">
+                <h1 class="navbar-brand"">RBC parser</h1>
+            </nav>
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>

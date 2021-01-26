@@ -1,1 +1,5 @@
 @import "../../node_modules/bootstrap";
+
+.navbar h1 {
+    margin-bottom: 0;
+}
