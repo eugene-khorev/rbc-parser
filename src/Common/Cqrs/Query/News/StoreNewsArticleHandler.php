@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Handler that stores news articles
  * @package App\Common\Cqrs\Query\News
  */
-class StoreNewsArticleHandler implements QueryHandlerInterface
+final class StoreNewsArticleHandler implements QueryHandlerInterface
 {
     /**
      * StoreNewsArticleHandler constructor.

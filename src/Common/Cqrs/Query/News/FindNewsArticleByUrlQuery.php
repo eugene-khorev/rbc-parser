@@ -21,7 +21,7 @@ final class FindNewsArticleByUrlQuery implements QueryInterface
     ) {}
 
     /**
-     * Return URL queue  parameter
+     * Return URL queue parameter
      * @return string
      */
     public function getUrl(): string

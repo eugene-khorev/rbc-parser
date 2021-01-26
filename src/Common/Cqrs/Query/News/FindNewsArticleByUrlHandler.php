@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
  * Handler that finds news articles by URL
  * @package App\Common\Cqrs\Query\News
  */
-class FindNewsArticleByUrlHandler implements QueryHandlerInterface
+final class FindNewsArticleByUrlHandler implements QueryHandlerInterface
 {
     /**
      * FindNewsArticleByUrlHandler constructor.

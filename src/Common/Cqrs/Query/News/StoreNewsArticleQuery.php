@@ -11,7 +11,7 @@ use App\Entity\NewsArticle;
  * Query for storing news articles
  * @package App\Common\Cqrs\Query\News
  */
-class StoreNewsArticleQuery implements QueryInterface
+final class StoreNewsArticleQuery implements QueryInterface
 {
     /**
      * StoreNewsArticleQuery constructor.
