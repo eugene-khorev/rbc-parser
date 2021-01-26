@@ -7,8 +7,23 @@
 ARG PHP_VERSION=8.0
 ARG CADDY_VERSION=2
 
+FROM php:${PHP_VERSION}-fpm-alpine AS ext-amqp
+
+ENV EXT_AMQP_VERSION=master
+
+RUN docker-php-source extract \
+    && apk -Uu add git rabbitmq-c-dev \
+    && git clone --branch $EXT_AMQP_VERSION --depth 1 https://github.com/php-amqp/php-amqp.git /usr/src/php/ext/amqp \
+    && cd /usr/src/php/ext/amqp && git submodule update --init \
+    && docker-php-ext-install amqp
+
+RUN ls -al /usr/local/lib/php/extensions/
+
 # "php" stage
 FROM php:${PHP_VERSION}-fpm-alpine AS symfony_php
+
+COPY --from=ext-amqp /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini /usr/local/etc/php/conf.d/docker-php-ext-amqp.ini
+COPY --from=ext-amqp /usr/local/lib/php/extensions/no-debug-non-zts-20200930/amqp.so /usr/local/lib/php/extensions/no-debug-non-zts-20200930/amqp.so
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000
@@ -88,6 +103,12 @@ RUN composer create-project "symfony/skeleton ${SYMFONY_VERSION}" . --stability=
 	composer clear-cache
 
 ###> recipes ###
+###> doctrine/doctrine-bundle ###
+RUN apk add --no-cache --virtual .pgsql-deps postgresql-dev; \
+	docker-php-ext-install -j$(nproc) pdo_pgsql; \
+	apk add --no-cache --virtual .pgsql-rundeps so:libpq.so.5; \
+	apk del .pgsql-deps
+###< doctrine/doctrine-bundle ###
 ###< recipes ###
 
 COPY . .
@@ -136,3 +157,5 @@ COPY docker/caddy/Caddyfile /etc/caddy/Caddyfile
 FROM rabbitmq:3-alpine AS symfony_rabbitmq
 
 RUN rabbitmq-plugins enable rabbitmq_management
+
+FROM postgres:${POSTGRES_VERSION:-13}-alpine AS symfony_postgres
