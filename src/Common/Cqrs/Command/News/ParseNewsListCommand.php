@@ -25,7 +25,7 @@ final class ParseNewsListCommand implements CommandInterface
      * Return news list URL
      * @return string
      */
-    public function getArticleLink(): string
+    public function getListLink(): string
     {
         return $this->listLink;
     }

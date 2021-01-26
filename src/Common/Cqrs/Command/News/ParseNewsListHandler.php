@@ -42,7 +42,7 @@ final class ParseNewsListHandler implements CommandHandlerInterface
     {
         // Get data to parse from URL defined in command
         $content = $this->dataProvider->getData(
-            $command->getArticleLink()
+            $command->getListLink()
         );
 
         // Prepare parser and get list of news article URLs
