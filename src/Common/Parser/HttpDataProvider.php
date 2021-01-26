@@ -4,6 +4,8 @@
 namespace App\Common\Parser;
 
 
+use Symfony\Component\HttpClient\Exception\ClientException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -28,13 +30,19 @@ final class HttpDataProvider implements DataProviderInterface
      * @param string $source URL to request to get data
      * @param string $method HTTP request method
      * @return string
-     * @throws ExceptionInterface
+     * @throws ExceptionInterface|ClientException
      */
     public function getData(string $source, string $method = 'GET'): string
     {
+        // Run HTTP request
         $response = $this->client->request($method, $source);
-//        $statusCode = $response->getStatusCode();
-//        $contentType = $response->getHeaders()['content-type'][0];
+
+        // Check status code
+        $statusCode = $response->getStatusCode();
+        if ($statusCode !== Response::HTTP_OK) {
+            throw new ClientException($response);
+        }
+
         return $response->getContent();
     }
 }
