@@ -18,6 +18,11 @@ class NewsArticle
     private int $id;
 
     /**
+     * @ORM\Column(type="text", unique=true)
+     */
+    private string $url;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private \DateTimeInterface $published_at;
@@ -44,6 +49,24 @@ class NewsArticle
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * `url` property getter
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * `url` property getter
+     * @param string $url
+     */
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
     }
 
     /**
@@ -129,4 +152,5 @@ class NewsArticle
 
         return $this;
     }
+
 }
