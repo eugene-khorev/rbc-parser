@@ -22,24 +22,24 @@ final class NewsArticleParser extends CrawlerBasedParser implements NewsArticleP
     private Crawler $article;
 
     /**
-     * @var string Article date
+     * @var string|null Article date
      */
-    private string $date;
+    private ?string $date;
 
     /**
-     * @var string Article title
+     * @var string|null Article title
      */
-    private string $title;
+    private ?string $title;
 
     /**
-     * @var string Article image URL
+     * @var string|null Article image URL
      */
-    private string $image;
+    private ?string $image;
 
     /**
-     * @var string Article body
+     * @var string|null Article body
      */
-    private string $body;
+    private ?string $body;
 
     /**
      * @inheritDoc
@@ -52,11 +52,11 @@ final class NewsArticleParser extends CrawlerBasedParser implements NewsArticleP
             // Find article content container
             $this->article = $this->crawler->filter('.article__content');
 
-            // Get article data
-            $this->date = $this->getArticleDate();
-            $this->title = $this->getArticleTile();
-            $this->image = $this->getArticleImage();
-            $this->body = $this->getArticleBody();
+            // Clean field values
+            $this->date = null;
+            $this->title = null;
+            $this->image = null;
+            $this->body = null;
         } catch (\Exception $e) {
             throw new ParserException('Error preparing news article', previous: $e);
         }
