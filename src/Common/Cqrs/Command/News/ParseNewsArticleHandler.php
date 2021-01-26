@@ -55,11 +55,11 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
 
             // Store article
             $article = $this->storeArticle(
-                $url = $articleLink,
-                $published_at = $this->newsArticleParser->getArticleDate(),
-                $title = $this->newsArticleParser->getArticleTile(),
-                $image_url = $this->newsArticleParser->getArticleImage(),
-                $body = $this->newsArticleParser->getArticleBody(),
+                $articleLink,
+                $this->newsArticleParser->getArticleDate(),
+                $this->newsArticleParser->getArticleTile(),
+                $this->newsArticleParser->getArticleImage(),
+                $this->newsArticleParser->getArticleBody(),
             );
 
             $this->logger->info('News article parsed', [$article]            );
