@@ -5,10 +5,12 @@ namespace App\Common\Cqrs\Command\News;
 
 
 use App\Common\Cqrs\Command\CommandHandlerInterface;
+use App\Common\Cqrs\Query\News\FindNewsArticleByUrlQuery;
+use App\Common\Cqrs\Query\News\StoreNewsArticleQuery;
+use App\Common\Cqrs\Query\QueryBusInterface;
 use App\Common\Parser\DataProviderInterface;
 use App\Common\Parser\Html\NewsArticleParserInterface;
 use App\Entity\NewsArticle;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -23,15 +25,15 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
     /**
      * ParseNewsArticleHandler constructor.
      * @param LoggerInterface $logger Logger service
-     * @param ValidatorInterface $validator
-     * @param EntityManagerInterface $entityManager Doctrine entity manager
+     * @param ValidatorInterface $validator Validator service
+     * @param QueryBusInterface $queryBus Queue bus service
      * @param DataProviderInterface $dataProvider Data provider for parser
      * @param NewsArticleParserInterface $newsArticleParser News article parser service
      */
     public function __construct(
         private LoggerInterface $logger,
         private ValidatorInterface $validator,
-        private EntityManagerInterface $entityManager,
+        private QueryBusInterface $queryBus,
         private DataProviderInterface $dataProvider,
         private NewsArticleParserInterface $newsArticleParser,
     ) {}
@@ -84,34 +86,30 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
         string $body,
     ): NewsArticle
     {
-        // Get news article entity repository
-        $repository = $this->entityManager->getRepository(NewsArticle::class);
-
-        // Check if the article already exists by its URL
-        $article = $repository->findOneBy(['url' => $url]);
-        if (empty($article)) {
-            // Create a new article
-            $article = new NewsArticle;
-        }
+        // Find article by URL
+        $article = $this->queryBus->handle(
+            new FindNewsArticleByUrlQuery($url)
+        );
 
         // Set article fields
         $article->setUrl($url);
         $article->setPublishedAt(
-            new \DateTime($published_at) // 2021-01-26T06:32:27+03:00
+            new \DateTime($published_at)
         );
         $article->setTitle($title);
         $article->setImageUrl($image_url);
         $article->setBody($body);
-
-        // Store article data
-        $this->entityManager->persist($article);
-        $this->entityManager->flush();
 
         // Validate news article entity
         $errors = $this->validator->validate($article);
         if (count($errors) > 0) {
             throw new ValidationFailedException($errors->get(0)->getInvalidValue(), $errors);
         }
+
+        // Store article data
+        $this->queryBus->handle(
+            new StoreNewsArticleQuery($article)
+        );
 
         return $article;
     }
