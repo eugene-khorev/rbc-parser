@@ -69,7 +69,7 @@ final class ParseNewsArticleHandler implements CommandHandlerInterface
     }
 
     /**
-     * Store news article via Doctrine entity repository
+     * Store news article via query bus command
      * @param string $url Article URL
      * @param string $published_at Article publication date
      * @param string $title Article title
