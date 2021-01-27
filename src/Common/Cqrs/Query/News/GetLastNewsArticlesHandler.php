@@ -35,6 +35,9 @@ class GetLastNewsArticlesHandler implements QueryHandlerInterface
         $repository = $this->entityManager->getRepository(NewsArticle::class);
 
         // Find recent articles
-        return $repository->findBy([], limit: $query->getLimit());
+        return $repository->findBy([],
+            orderBy: ['published_at' => 'DESC'],
+            limit: $query->getLimit()
+        );
     }
 }

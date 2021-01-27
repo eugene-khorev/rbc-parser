@@ -91,7 +91,7 @@ final class NewsArticleParser extends CrawlerBasedParser implements NewsArticleP
      */
     public function getArticleBody(): string
     {
-        return $this->body ??= implode('',
+        return $this->body ??= implode('<br/>',
             $this->article
                 ->filter('.article__text')
                 ->filter('.article__text__overview, p')

@@ -16,4 +16,9 @@ framework:
 
         routing:
             # Route your messages to the transports
+            'App\Common\Cqrs\Command\News\ParseNewsListCommand': async
             'App\Common\Cqrs\Command\News\ParseNewsArticleCommand': async
+            'App\Common\Cqrs\Query\News\FindNewsArticleByIdQuery': sync
+            'App\Common\Cqrs\Query\News\FindNewsArticleByUrlQuery': sync
+            'App\Common\Cqrs\Query\News\GetLastNewsArticlesQuery': sync
+            'App\Common\Cqrs\Query\News\StoreNewsArticleQuery': sync
